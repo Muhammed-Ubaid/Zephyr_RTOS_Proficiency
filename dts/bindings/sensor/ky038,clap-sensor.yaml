@@ -1,0 +1,20 @@
+# KY-038 clap sensor binding definition for Zephyr RTOS (Digital Interrupt Input)
+# Mohammed Ubaid : 25/08/24
+
+description: |
+  Binding for the KY-038 clap sensor used as a digital interrupt input. 
+  The sensor's digital output pin triggers an interrupt when a sound is detected.
+
+compatible: "zephyr,clap-sensor"
+
+properties:
+  output-gpios:
+    type: phandle-array
+    description: |
+      GPIO pin connected to the digital output of the KY-038 clap sensor.
+      This pin will be used to trigger an interrupt on sound detection.
+
+  label:
+    type: string
+    description: |
+      Label for the sensor instance.

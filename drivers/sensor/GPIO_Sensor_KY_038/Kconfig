@@ -1,0 +1,9 @@
+# Copyright (c) 2021 Nordic Semiconductor ASA
+# SPDX-License-Identifier: Apache-2.0
+
+config KY038_SENSOR
+	bool "KY038 Clap sensor"
+	default n
+	select GPIO
+	help
+	  This macro enables the KY038 clap sensor

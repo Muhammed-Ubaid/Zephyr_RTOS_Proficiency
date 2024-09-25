@@ -1,0 +1,82 @@
+# KY-038 sensor binding definition for Zephyr RTOS
+
+title: KY-038 Sound Sensor
+description: |
+  Binding for the KY-038 sound sensor, which detects sound levels via an analog signal. 
+  The output is typically connected to an ADC pin for sound level measurement.
+
+compatible: "ky038,sound-sensor"
+
+properties:
+  vref-mv:
+    type: int
+    description: |
+      Reference voltage in millivolts for the ADC. This is necessary for
+      converting the analog output from the sensor to a digital value.
+    required: true
+
+  adc-channels:
+    type: int
+    description: |
+      Number of ADC channels used by the sensor. Typically, this is 1 for 
+      the KY-038 since it provides a single analog output.
+    required: true
+
+  output-gpios:
+    type: phandle-array
+    description: |
+      GPIO pin connected to the digital output of the KY-038. This is optional and 
+      can be used for triggering an interrupt when sound is detected.
+    required: false
+
+  io-channels:
+    type: phandle-array
+    description: |
+      ADC channel connected to the analog output of the KY-038 sensor.
+    required: true
+
+  label:
+    type: string
+    description: |
+      Label for the sensor instance.
+    required: true
+
+required:
+  - io-channels
+  - vref-mv
+  - label
+  - adc-channels
+
+Explanation:
+compatible: The compatible string uniquely identifies the sensor. This should match what you use in your DeviceTree source files.
+vref-mv: Specifies the reference voltage for the ADC, which is necessary for converting the analog signal to a digital value.
+adc-channels: Specifies the number of ADC channels used by the sensor. Typically, this is set to 1 for the KY-038.
+output-gpios: (Optional) Specifies the GPIO pin connected to the digital output of the KY-038 for sound detection.
+io-channels: Specifies the ADC channel connected to the analog output of the sensor.
+label: A string label for the sensor instance.
+
+// nrf52840dk_nrf52840.overlay
+
+/ {
+    ky038_sound_sensor: ky038-sensor {
+        compatible = "ky038,sound-sensor";
+        label = "KY038_Sound";
+        io-channels = <&adc 1>;   // ADC channel 1 on the nRF52840
+        vref-mv = <3300>;         // Assuming a 3.3V reference voltage
+        adc-channels = <1>;       // The KY-038 uses a single ADC channel
+        output-gpios = <&gpio0 11 GPIO_ACTIVE_HIGH>;  // Optional: GPIO pin P0.11 for digital output
+    };
+};
+
+Explanation:
+ky038_sound_sensor: ky038-sensor: Defines a node for the KY-038 sound sensor with the label ky038_sound_sensor.
+compatible = "ky038,sound-sensor";: Matches the compatible string defined in your binding.yaml file.
+label = "KY038_Sound";: Assigns a label to the sensor instance.
+io-channels = <&adc 1>;: Specifies ADC channel 1 for reading the analog output of the KY-038 sensor.
+vref-mv = <3300>;: Sets the reference voltage to 3.3V (3300 millivolts).
+adc-channels = <1>;: Specifies that the sensor uses a single ADC channel.
+output-gpios = <&gpio0 11 GPIO_ACTIVE_HIGH>;: (Optional) Defines the GPIO pin P0.11 (on port 0) for the digital output of the sensor. This is optional and can be omitted if not using the digital output.
+Usage:
+Save this overlay file as nrf52840dk_nrf52840.overlay in your Zephyr project's boards directory.
+Ensure that your project configuration enables ADC and GPIO, and make sure to include the appropriate ADC and GPIO driver in your project's .conf file.
+This overlay will configure the nRF52840 to interface with the KY-038 sound sensor using the specified ADC channel and GPIO pin.

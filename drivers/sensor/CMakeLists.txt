@@ -2,3 +2,4 @@
 # SPDX-License-Identifier: Apache-2.0
 
 add_subdirectory_ifdef(CONFIG_EXAMPLE_SENSOR example_sensor)
+add_subdirectory_ifdef(CONFIG_KY038_SENSOR GPIO_Sensor_KY_038)

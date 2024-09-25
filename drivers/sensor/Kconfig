@@ -3,4 +3,7 @@
 
 if SENSOR
 rsource "example_sensor/Kconfig"
+rsource "GPIO_Sensor_KY_038/Kconfig"
 endif # SENSOR
+
+
